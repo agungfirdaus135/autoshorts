@@ -167,13 +167,14 @@ git fetch origin
 git switch codespaces-web
 npm install
 sudo apt-get update && sudo apt-get install -y ffmpeg
-python3 -m pip install -r backend/requirements.txt
+python3 -m venv .venv
+.venv/bin/python -m pip install -r backend/requirements.txt
 ```
 
 Start the API in one terminal:
 
 ```bash
-uvicorn backend.main:app --host 0.0.0.0 --port 8000
+.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
 Start Vite in a second terminal:
