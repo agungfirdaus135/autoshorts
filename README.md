@@ -152,3 +152,36 @@ If AutoShorts helps you create content faster, consider supporting its developme
 Your support helps fund new features, bug fixes, and ongoing improvements.
 
 👉 https://buy.polar.sh/polar_cl_ZjNgejG1JnPQqVXyMmEmq7vpdwJUFBqx4qahw4BqBCP
+
+
+---
+
+## Browser mode in GitHub Codespaces (experimental)
+
+The `codespaces-web` branch adds a browser-first prototype while preserving the native Tauri entry point. The first pass supports video upload, duration probing, starter timestamp suggestions, and vertical MP4 rendering. The starter timestamps are **not AI-ranked moments**; transcription and LLM analysis are not connected yet.
+
+In the Codespaces terminal, switch to the branch and install the Python dependencies:
+
+```bash
+git fetch origin
+git switch codespaces-web
+npm install
+sudo apt-get update && sudo apt-get install -y ffmpeg
+python3 -m pip install -r backend/requirements.txt
+```
+
+Start the API in one terminal:
+
+```bash
+uvicorn backend.main:app --host 0.0.0.0 --port 8000
+```
+
+Start Vite in a second terminal:
+
+```bash
+npm run dev -- --host 0.0.0.0
+```
+
+Open port **1420** in the Codespaces Ports panel. Vite proxies `/api` requests to port 8000. If Codespaces asks about port visibility, keep it **Private** unless you intentionally want to share access.
+
+The backend stores uploaded videos and rendered MP4 files under `/tmp/autoshorts-web`, which is temporary. The upload limit is 1 GB. This is an experimental prototype, not a production deployment; do not upload confidential recordings. API keys are not needed for this first pass.
