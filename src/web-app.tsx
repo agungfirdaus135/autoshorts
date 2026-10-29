@@ -7,6 +7,12 @@ import "./web-studio.css";
 type Candidate = { id: string; start: number; end: number; title: string; note: string; };
 type UploadResult = { video_id: string; filename: string; duration: number; candidates: Candidate[] };
 
+async function readApiResponse(res: Response): Promise<any> {
+  const raw = await res.text();
+  try { return raw ? JSON.parse(raw) : {}; }
+  catch { throw new Error(`Server returned a non-JSON response (HTTP ${res.status}). Check that the Codespaces backend and Vite proxy are running, then try again.`); }
+}
+
 function WebApp() {
   const [file, setFile] = useState<File | null>(null);
   const [job, setJob] = useState<UploadResult | null>(null);
@@ -22,7 +28,7 @@ function WebApp() {
     try {
       const data = new FormData(); data.append("file", file);
       const res = await fetch("/api/upload", { method: "POST", body: data });
-      const body = await res.json();
+      const body = await readApiResponse(res);
       if (!res.ok) throw new Error(body.detail || "Upload failed");
       setJob(body); setNotice("Video ready. Candidate timestamps are starter suggestions, not AI-ranked moments yet.");
     } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
