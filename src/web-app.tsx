@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Clapperboard, Upload, Scissors, Download, LoaderCircle, Film, AlertCircle } from "lucide-react";
 import "./styles.css";
+import "./web-studio.css";
 
 type Candidate = { id: string; start: number; end: number; title: string; note: string; };
 type UploadResult = { video_id: string; filename: string; duration: number; candidates: Candidate[] };
